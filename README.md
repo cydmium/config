@@ -1,2 +1,3 @@
 # config
-config files for vim and i3
+
+config files for vim, zsh, and i3
