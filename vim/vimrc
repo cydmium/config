@@ -1,0 +1,324 @@
+" General Remappings {{{
+let mapleader = ","   " Define leader as comma, default is \
+let maplocalleader = "\\" " Define localleader as \
+" Allow j and k to move to wrapped lines
+nnoremap j gj
+nnoremap k gk
+" Move current line down one
+nnoremap - ddp
+" Move current line up one
+nnoremap _ ddkP
+" ctrl+d to delete current line
+nnoremap <C-d> dd
+inoremap <C-d> <esc>ddi
+" ctrl+u to all caps the current word
+inoremap <C-u> <esc>viwUea
+nnoremap <C-u> viwU
+" edit and source vimrc using <leader>ev and <leader>sv
+nnoremap <leader>ev :sp $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+" H and L move to beginning (first non-space char) or end of current line
+nnoremap H ^
+nnoremap L $
+" bind jk to escape
+inoremap jk <esc>
+set pastetoggle=<f2>    " Press F2 before pasting to prevent indent cascading
+" Easy Buffer Management With F5
+nnoremap <F5> :buffers<CR>:buffer<Space>
+" Open previous buffer in a split
+nnoremap <leader>b :silent execute "rightbelow split " . bufname("#")<cr>
+" Open File Explorer in buffer/splits
+nnoremap <leader>se :Sexplore<cr>
+nnoremap <leader>ve :Vexplore<cr>
+nnoremap <leader>e :Explore<cr>
+" }}}
+" Operator-Pending Mappings {{{
+" Inside Next ()/{} mapped to in(/{
+onoremap in( :<c-u>normal! f(vi(<cr>
+onoremap in{ :<c-u>normal! f{vi{<cr>
+" Inside Previous ()/{} mapped to il(/{
+onoremap il( :<c-u>normal! F)vi(<cr>
+onoremap il{ :<c-u>normal! F}vi{<cr>
+" }}}
+" General Abbreviations {{{
+" Abbreviations to fix typos
+iabbrev adn and
+iabbrev tehn then
+" Abbreviation to add emails
+iabbrev @@ david.k.richardson@gtri.gatech.edu
+iabbrev kevinemail kevin.cook@gtri.gatech.edu
+iabbrev jamesemail james.dee@gtri.gatech.edu
+iabbrev justinemail justin.htay@gtri.gatech.edu
+iabbrev brandonemail brandon.goddard@gtri.gatech.edu
+" }}}
+" Vim Tabs {{{
+" ctrl + t to edit in new tab
+" space + # to switch to tab #
+nnoremap <C-t> :tabe<Space>
+inoremap <C-t> <ESC>:tabe<Space>
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <leader>6 6gt
+nnoremap <leader>7 7gt
+nnoremap <leader>8 8gt
+nnoremap <leader>9 9gt
+nnoremap <leader>0 10gt
+" }}}
+" Search Options {{{
+set showmatch       " Shows matching () [] {}
+set incsearch       " Incremental Search, search as you type in more characters
+set hlsearch        " Highlights Matches
+set ignorecase    " Case insensitive searches
+set smartcase       " Case insensitive unless using a capital letter
+" Turn off Search Highlighting
+nnoremap <leader><space> :nohlsearch<CR>
+" }}}
+" Assorted Vim Settings {{{
+set updatetime=500
+set backspace=2     " Make backspace work like expected
+set hidden          " Allow buffer switching without writing edits
+set nolazyredraw      " Redraw the screen only when necessary
+set modelines=1     " Allow modelines
+set splitright
+set splitbelow
+" }}}
+" Fold Settings {{{
+set foldenable      " Enable Folding
+"set foldlevelstart=0   " Most folds open by default
+set foldnestmax=10  " 10 nested folds max
+" Space opens or closes folds
+nnoremap <space> za
+set foldmethod=marker   " Fold based on indentation levels
+set foldlevelstart=5
+" }}}
+" File Formatting {{{
+filetype plugin indent on "detect filetype
+set autoindent      " Autoindent
+" }}}
+" Autocommands {{{
+""" All Files {{{
+augroup allFiles
+    autocmd!
+augroup end
+""" }}}
+" File Type Specific {{{
+" Python {{{
+augroup filetype_python
+    autocmd!
+    " Fold based on indentation level
+    autocmd FileType python setlocal foldmethod=syntax
+    autocmd FileType python setlocal textwidth=79
+augroup end
+" }}}
+" Vim {{{
+augroup filetype_vim
+    autocmd!
+    " Fold based on markers
+    autocmd FileType vim setlocal foldmethod=marker
+    autocmd FileType vim setlocal foldlevel=0
+    " Abbreviations
+    autocmd FileType vim iabbrev <buffer> augroup augroup<cr>augroup end<esc>kA
+augroup end
+" }}}
+" MATLAB {{{
+augroup filetype_matlab
+    autocmd!
+    " Fold based on indentation level
+    autocmd FileType matlab setlocal foldmethod=indent
+    " Abbreviations
+    autocmd FileType matlab iabbrev <buffer> func function<cr>end<esc>kA
+    autocmd FileType matlab iabbrev <buffer> switch switch<cr>end<esc>kA
+    autocmd FileType matlab iabbrev <buffer> if if<cr>end<esc>kA
+    autocmd FileType matlab iabbrev <buffer> for for<cr>end<esc>kA
+    autocmd FileType matlab iabbrev <buffer> while while<cr>end<esc>kA
+augroup end
+" }}}
+" Shell Scripts {{{
+augroup filetype_sh
+    autocmd!
+augroup end
+" }}}
+" C++ {{{
+augroup filetype_cpp
+    autocmd!
+    " Fold based on syntax
+    autocmd FileType cpp setlocal foldmethod=syntax
+augroup end
+" }}}
+" Markdown {{{
+augroup filetype_markdown
+    autocmd!
+    autocmd FileType markdown setlocal textwidth=79
+augroup end
+" }}}
+" }}}
+" }}}
+" Plugin Installation {{{
+" Auto install vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+
+" Load Always on Plugins
+" Vim Git Plugin
+Plug 'tpope/vim-fugitive'
+" Vim Status Bar
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" Show Git Status per line
+Plug 'airblade/vim-gitgutter' 
+" leader leader w/b gives options
+Plug 'easymotion/vim-easymotion' 
+" comment lines with gc/gcc
+Plug 'tpope/vim-commentary'
+" Enable Table mode with leader tm
+Plug 'dhruvasagar/vim-table-mode' 
+" Autocomplete parens/brackets/"
+Plug 'Raimondi/delimitMate'
+" Autocompletion
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer'}
+" Fuzzy Search
+Plug 'ctrlpvim/ctrlp.vim'
+" File tags with ctrl+b
+Plug 'majutsushi/tagbar'
+" Enhance netrw explorer
+Plug 'tpope/vim-vinegar'
+" Recolor Parentheses to show matchin pairs
+Plug 'kien/rainbow_parentheses.vim'
+" Snippet Engine
+Plug 'SirVer/ultisnips'
+" Default Snippets
+Plug 'honza/vim-snippets', { 'do': 'rm -rf ./snippets'}
+
+" Colorscheme
+Plug 'sjl/badwolf'
+Plug 'reedes/vim-colors-pencil', { 'on': 'Goyo'}
+
+" Conditional Plugins
+" Syntax Checker for neovim
+Plug 'neomake/neomake', { 'has': 'nvim'}
+" Proper Python Folding
+Plug 'FreekKalter/vim-python-folding', {'for': 'python'}
+" Better Markdown highlighting
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
+" Nerdtree File Explorer
+Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
+Plug 'Xuyuanp/nerdtree-git-plugin', {'on': 'NERDTreeToggle'}
+" Distraction Free Vim
+Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
+" Latex Suite for tex files
+Plug 'vim-latex/vim-latex'
+" Better latex syntax highlighting
+Plug 'gerw/vim-tex-syntax', { 'for': 'tex'}
+" Julia Syntax Support
+Plug 'JuliaEditorSupport/julia-vim'
+
+" Install TDATools-vim
+Plug 'git@gitlab.acl.gtri.gatech.edu:drichardson42-gtri/tdatools-vim.git'
+
+" End Plugin List
+call plug#end()
+" }}}
+" Plugin Settings {{{
+" You Complete Me Configuration
+let g:ycm_python_binary_path = 'python'
+let g:ycm_autoclose_preview_window_after_completion=1
+
+" vim-airline configuration
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='wombat'
+set noshowmode      " Remove default mode information
+set ttimeoutlen=10  " Make mode changes faster
+
+" vim-table-mode
+let g:table_mode_corner='|'
+
+" nerdtree Setup
+autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
+"             \!exists("s:std_in") | exe 'NERDTree' argv()[0]
+map <C-n> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
+            \b:NERDTree.isTabTree()) | q | endif
+
+" ctrlP options
+let g:ctrlp_working_path_mode = 'r'
+if executable('ag')
+  let g:ctrlp_user_command = 'ag %s --nocolor -g ""'
+endif
+
+" neomake settings
+call neomake#configure#automake('nrw', 1000)
+
+" tagbar options
+nmap <C-b> :TagbarOpenAutoClose<CR>
+
+" goyo changes
+function! s:goyo_enter()
+    set nonumber
+    set norelativenumber
+    colorscheme pencil
+    set background=dark
+endfunction
+
+function! s:goyo_leave()
+    colorscheme badwolf
+    set number
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+" python fold settings
+let g:SimpylFold_docstring_preview=1
+
+" Ultisnips configuration
+let g:UltiSnipsExpandTrigger = '<C-j>'
+let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+if has('nvim')
+    let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
+endif
+
+" tdatools settings
+let g:tda_use_abbrev = 1
+
+" vinegar hide .files by default
+let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
+
+" rainbow parentheses autoload
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+au Syntax * RainbowParenthesesLoadChevrons
+
+" latex settings
+let g:tex_flavor='latex'
+
+" Julia auto latex
+let g:latex_to_unicode_auto = 1
+" }}}
+" Colors and UI Options {{{
+set background=dark
+colorscheme badwolf " Color Scheme
+syntax on           " Turn on Syntax Highlighting
+set tabstop=4       " How many spaces a Tab is viewed as
+set softtabstop=4   " Number of spaces inserted when you hit tab and removed when you delete a tab
+set expandtab       " Makes Tabs Spaces
+set shiftwidth=4    " Causes Tabs to expand to the next multiple of shift width
+set smarttab        " Make BS delete a shiftwidth number of spaces at the start of a line
+set number          " Enables line numbers
+set showcmd         " Shows command in bottom right
+set cursorline      " Highlights the current line
+set wildmenu        " Autocomplete tool
+set scrolloff=1     " Force vim to always show one line above or below current line
+set autoread        " Vim updates with file changes made outside vim instance
+" }}}
