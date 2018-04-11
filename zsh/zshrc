@@ -33,20 +33,6 @@ else
     export EDITOR=vi
 fi
 # }}}
-# SSH Aliases {{{
-alias -g 'lng2=ssh -X lightning2 -t zsh'
-alias -g 'lak=ssh -X lakota -t zsh'
-alias -g 'chey=ssh -X cheyenne -t zsh'
-alias -g 'chin=ssh -X chinook -t zsh'
-alias -g 'cbr=ssh -X cobra -t zsh'
-alias -g 'cyc=ssh -X cyclone -t zsh'
-alias -g 'gib=ssh -X gibson -t zsh'
-alias -g 'fen=ssh -X fender -t zsh'
-alias -g 'laz=ssh -X lazarus -t zsh'
-alias -g 'lng-old=ssh -X lightning-old -t zsh'
-alias -g 'rap=ssh -X raptor -t zsh'
-alias -g 'tes=ssh -X tesla -t zsh'
-# }}}
 # Auto-correct Prompt {{{
 setopt correct
 autoload -U colors && colors
