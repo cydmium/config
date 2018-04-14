@@ -44,12 +44,6 @@ onoremap il{ :<c-u>normal! F}vi{<cr>
 " Abbreviations to fix typos
 iabbrev adn and
 iabbrev tehn then
-" Abbreviation to add emails
-iabbrev @@ david.k.richardson@gtri.gatech.edu
-iabbrev kevinemail kevin.cook@gtri.gatech.edu
-iabbrev jamesemail james.dee@gtri.gatech.edu
-iabbrev justinemail justin.htay@gtri.gatech.edu
-iabbrev brandonemail brandon.goddard@gtri.gatech.edu
 " }}}
 " Vim Tabs {{{
 " ctrl + t to edit in new tab
