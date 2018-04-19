@@ -1,0 +1,139 @@
+" Remappings {{{
+let mapleader = ","	" Define leader as comma, default is \
+" Allow j and k to move to wrapped lines
+nnoremap j gj
+nnoremap k gk
+" ctrl+u to all caps the current word
+inoremap <C-u> <esc>viwUea
+nnoremap <C-u> viwU
+" edit and source vimrc using <leader>ev and <leader>sv
+nnoremap <leader>ev :sp $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+" H and L move to beginning (first non-space char) or end of current line
+nnoremap H ^
+nnoremap L $
+" bind jk to escape
+inoremap jk <esc>
+" Easy Buffer Management With F5
+nnoremap <F5> :buffers<CR>:buffer<Space>
+" Open previous buffer in a split
+nnoremap <leader>b :silent execute "rightbelow split " . bufname("#")<cr>
+" Open File Explorer in buffer/splits
+nnoremap <leader>se :Sexplore<cr>
+nnoremap <leader>ve :Vexplore<cr>
+nnoremap <leader>e :Explore<cr>
+" [ Options {{{
+" [ac enables auto correct ]ac disables
+nnoremap [ac :EnableAutocorrect<cr>
+nnoremap ]ac :DisableAutocorrect<cr>
+" }}}
+" }}}
+" Vim Options {{{
+filetype plugin indent on	"detect file type 
+set autoindent		" Auto indent
+set hidden
+set number
+set splitright
+set splitbelow
+set modelines=1
+set backspace=2
+set scrolloff=3
+" Fold Settings {{{
+set foldenable
+set foldlevelstart=999
+set foldnestmax=10
+nnoremap <space> za
+set foldmethod=marker
+" }}}
+" Search Options {{{
+set showmatch		" Shows matching () [] {}
+set incsearch		" Incremental Search, search as you type in more characters
+set hlsearch		" Highlights Matches
+set ignorecase		" Case insensitive searches
+set smartcase		" Case insensitive unless using a capital letter
+" Turn off Search Highlighting
+nnoremap <leader><space> :nohlsearch<CR>
+" }}}
+" }}}
+" Plugin Installation {{{
+" Auto install vim-plug {{{
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+" }}}
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter' 
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-markdown', { 'for': 'markdown' }
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-unimpaired'
+Plug 'Raimondi/delimitMate'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'sjl/badwolf'
+Plug 'morhetz/gruvbox'
+Plug 'sedm0784/vim-you-autocorrect'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'kopischke/vim-fetch'
+Plug 'easymotion/vim-easymotion' 
+Plug 'sjl/gundo.vim', { 'on': 'GundoToggle'}
+Plug 'neomake/neomake', { 'has': 'nvim'}
+Plug 'FreekKalter/vim-python-folding', {'for': 'python'}
+Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
+Plug 'Xuyuanp/nerdtree-git-plugin', {'on': 'NERDTreeToggle'}
+Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
+Plug 'reedes/vim-colors-pencil', { 'on': 'Goyo'}
+Plug 'gerw/vim-tex-syntax', { 'for': 'tex'}
+Plug 'JuliaEditorSupport/julia-vim'
+" End Plugin List
+call plug#end()
+" }}}
+" Plugin Options {{{
+" Airline {{{
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='gruvbox'
+let g:airline_powerline_fonts = 1
+" }}}
+" ctrlP options {{{
+let g:ctrlp_working_path_mode = 'r'
+if executable('ag')
+  let g:ctrlp_user_command = 'ag %s --nocolor -g ""'
+endif
+" }}}
+" Neomake Settings
+call neomake#configure#automake('nrw', 200)
+" goyo changes {{{
+function! s:goyo_enter()
+    set nonumber
+    set norelativenumber
+    colorscheme pencil
+    set background=dark
+endfunction
+
+function! s:goyo_leave()
+    colorscheme gruvbox
+    set number
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+" }}}
+" }}}
+" Auto commands {{{
+augroup allFiles
+    autocmd!
+augroup end
+" }}}
+" UI Options {{{
+set background=dark
+let g:gruvbox_italic=1
+colorscheme gruvbox
+" }}}

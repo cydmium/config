@@ -1,6 +1,5 @@
-# The following lines were added by compinstall {{{
-
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
+# Completion Options {{{
+zstyle ':completion:*' completer _complete _ignored _approximate
 zstyle ':completion:*' expand prefix suffix
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' ignore-parents parent pwd directory
@@ -13,15 +12,15 @@ zstyle :compinstall filename '/home/drichardson42-gtri/.zshrc'
 
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
-# Lines configured by zsh-newuser-install
+# }}}
+# Assorted Options {{{
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-setopt autocd extendedglob notify
+setopt autocd extendedglob notify correct
 unsetopt beep
 bindkey -v
-# End of lines configured by zsh-newuser-install }}}
+# }}}
 # Use Neovim if it exists {{{
 if type nvim > /dev/null 2>&1; then
     alias vim='nvim'
@@ -34,56 +33,62 @@ else
     export EDITOR=vi
 fi
 # }}}
-# Auto-correct Prompt {{{
-setopt correct
+# Autocorrect Prompt {{{
 autoload -U colors && colors
 export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color? (Yes, No, Abort, Edit) "
-export SHELL=/bin/zsh
 # }}}
 # Key Bindings {{{
 # Fix Delete and Home Keys in Prompt {{{
-bindkey "^[[H" beginning-of-line
-bindkey "^[[F" end-of-line
-bindkey "^[[3~" delete-char
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
+bindkey "${terminfo[kdch1]}" delete-char
 bindkey "^[[Z"  menu-complete
 # }}}
-bindkey "^[[A" history-beginning-search-backward
-bindkey "^[[B" history-beginning-search-forward
+bindkey "${terminfo[kcuu1]}" history-beginning-search-backward
+bindkey "${terminfo[kcud1]}" history-beginning-search-forward
 # }}}
-# Export Commands {{{
+# Language Settings {{{
 export LANG=en_US.UTF-8
 export LC_ALL="en_US.UTF-8"
-export PATH=$PATH:/usr/lib64/qt4/bin:$HOME/.local/bin:$HOME/bin/mview
-export KEYTIMEOUT=10
 # }}}
-# Antigen Setup {{{
-# Auto-install Antigen {{{
-if [[ ! -d ~/.bundle ]]; then
-    mkdir ~/.bundle
-    curl -L git.io/antigen > ~/.bundle/antigen.zsh
+# ZPlug Setup {{{
+if [[ ! -d ~/.zplug ]]; then
+	git clone https://github.com/zplug/zplug ~/.zplug
+	source ~/.zplug/init.zsh && zplug update --self
 fi
-# }}}
-source ~/.bundle/antigen.zsh
-# Plugin Installation {{{
-antigen bundle git
-# CD to "frecent" directories with z
-antigen bundle rupa/z
-antigen bundle vi-mode
-# bd = backwards cd
-antigen bundle Tarrasch/zsh-bd
-antigen bundle ael-code/zsh-colored-man-pages
-antigen bundle zdharma/fast-syntax-highlighting
-# Notify about aliases
-antigen bundle MichaelAquilina/zsh-you-should-use
-# Powerline prompt
-antigen theme bhilburn/powerlevel9k
 
-antigen apply
+source ~/.zplug/init.zsh
+
+zplug "plugins/git", from:oh-my-zsh
+zplug "plugins/vi-mode", from:oh-my-zsh
+zplug "rupa/z", as:plugin
+zplug "Tarrasch/zsh-bd", as:plugin
+zplug "ael-code/zsh-colored-man-pages", as:plugin
+zplug "zdharma/fast-syntax-highlighting", as:plugin
+zplug "MichaelAquilina/zsh-you-should-use", as:plugin
+zplug "zsh-users/zsh-autosuggestions", as:plugin
+zplug "bhilburn/powerlevel9k", as:theme
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+zplug load
 # }}}
 # Plugin Settings {{{
+# Autosuggest {{{
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+bindkey '^j' autosuggest-accept
+bindkey '^k' autosuggest-execute
+# }}}
 # Powerline {{{
-# DEFAULT_USER=drichardson42-gtri
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
+DEFAULT_USER=david
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
 POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='153'
 POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND='236'
 POWERLEVEL9K_VI_MODE_INSERT_FOREGROUND='153'
@@ -93,8 +98,11 @@ POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='153'
 POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='236'
 POWERLEVEL9K_DIR_HOME_FOREGROUND='236'
 POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='236'
+POWERLEVEL9K_TIME_BACKGROUND='153'
+POWERLEVEL9K_TIME_FOREROUND='236'
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status vi_mode vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(time vi_mode vcs)
+POWERLEVEL9K_STATUS_OK=false
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=" "
@@ -105,4 +113,9 @@ FAST_HIGHLIGHT_STYLES[path]='bold'
 FAST_HIGHLIGHT_STYLES[globbing]='fg=yellow'
 FAST_HIGHLIGHT_STYLES[precommand]='fg=yellow,bold'
 # }}}
+# }}}
+# Other Settings {{{
+export PATH="$PATH:$HOME/.local/bin/"
+#(cat ~/.cache/wal/sequences &)
+alias ls='ls --color=always'
 # }}}

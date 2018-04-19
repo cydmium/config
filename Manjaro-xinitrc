@@ -64,3 +64,9 @@ get_session(){
 }
 
 exec $(get_session)
+
+if [[ -f ~/.Xresources ]]; then
+  xrdb -load ~/.Xresources
+fi
+
+xset +fp ~/.local/share/fonts
