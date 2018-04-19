@@ -216,9 +216,6 @@ Plug 'gerw/vim-tex-syntax', { 'for': 'tex'}
 " Julia Syntax Support
 Plug 'JuliaEditorSupport/julia-vim'
 
-" Install TDATools-vim
-Plug 'git@gitlab.acl.gtri.gatech.edu:drichardson42-gtri/tdatools-vim.git'
-
 " End Plugin List
 call plug#end()
 " }}}
