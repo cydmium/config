@@ -1,0 +1,261 @@
+" Remappings {{{
+let mapleader=','
+inoremap jk <esc>
+nnoremap <space> za
+" <leader>ev and <leader>sv edit and source vimrc respectively
+nnoremap <leader>ev :sp $MYVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+" <leader>e <leader>se <leader>ve open netrw
+nnoremap <leader>e :Explore<CR>
+inoremap <leader>e <esc>:Explore<CR>
+nnoremap <leader>se :Sexplore<CR>
+inoremap <leader>se <esc>:Sexplore<CR>
+nnoremap <leader>ve :Vexplore<CR>
+inoremap <leader>ve <esc>:Vexplore<CR>
+" j,k don't skip wrapped lines
+nnoremap j gj
+nnoremap k gk
+" <leader><space> to remove search highlighting
+nnoremap <leader><space> :nohlsearch<cr>
+" ctrl+u to all caps the current word
+inoremap <C-u> <esc>viwUea
+nnoremap <C-u> viwU
+" ctrl+d to delete current line
+nnoremap <C-d> dd
+inoremap <C-d> <esc>ddi
+" H and L move to beginning (first non-space char) or end of current line
+nnoremap H ^
+nnoremap L $
+" Easy Buffer Management With F5
+nnoremap <F5> :buffers<CR>:buffer<Space>
+" Open previous buffer in a split
+nnoremap <leader>b :silent execute "rightbelow split " . bufname("#")<cr>
+" }}}
+" General Abbreviations {{{
+" Abbreviations to fix typos
+iabbrev adn and
+iabbrev tehn then
+iabbrev @@ davidrichardson96@gmail.com
+" }}}
+" Vim Tabs {{{
+" ctrl + t to edit in new tab
+" space + # to switch to tab #
+nnoremap <C-t> :tabe<Space>
+inoremap <C-t> <ESC>:tabe<Space>
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <leader>6 6gt
+nnoremap <leader>7 7gt
+nnoremap <leader>8 8gt
+nnoremap <leader>9 9gt
+nnoremap <leader>0 10gt
+" }}}
+" Vim Settings {{{
+set number
+set hidden " Buffers don't require writes
+" Open splits in bottom right
+set splitbelow
+set splitright
+set noshowmode
+set foldenable
+set showcmd
+set pastetoggle=<f2>
+set modelines=1     " Allow modelines
+" }}}
+" Plugin Setup {{{
+" Auto-install vim-plug {{{
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+" }}}
+" Install and Configure Plugins {{{
+call plug#begin()
+
+" Solarized
+Plug 'altercation/vim-colors-solarized'
+" Fugitive - Git Plugin
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+" Enhance netrw
+Plug 'tpope/vim-vinegar'
+" Ctrlp - Fuzzy Buffer Search {{{
+Plug 'kien/ctrlp.vim'
+" The Silver Searcher {{{
+if executable('ag')
+	" Use ag instead of grep
+	set grepprg=ag\ --nogroup\ --nocolor
+	" Use ag in ctrlP
+	let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
+	" Don't cache ctrlP
+	let g:ctrlp_use_caching=0
+endif
+" }}}
+" }}}
+" Gitgutter
+Plug 'airblade/vim-gitgutter'
+"Airline - Beautiful Status/tabline {{{
+Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+let g:airline#extensions#tabline#enabled=1
+let g:airline_powerline_fonts=1
+" }}}
+" Easy Motion
+Plug 'easymotion/vim-easymotion'
+" Rainbow Parentheses
+Plug 'kien/rainbow_parentheses.vim'
+" Open to specific line
+Plug 'kopischke/vim-fetch'
+" A - Easy Header File Switching {{{
+Plug 'vim-scripts/a.vim', { 'for': ['c++', 'c']}
+nnoremap <leader>a :A<CR>
+nnoremap <leader>as :AS<CR>
+nnoremap <leader>at :AT<CR>
+" }}}
+" Completers {{{
+if has('nvim')
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+	Plug 'zchee/deoplete-jedi'
+	Plug 'zchee/deoplete-clang'
+	let g:deoplete#enable_at_startup=1
+	" deoplete tab-complete
+	inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+	" required clang settings
+	let g:deoplete#sources#clang#libclang_path='/usr/lib/x86_64-linux-gnu/libclang-3.8.so.1'
+	let g:deoplete#sources#clang#clang_header='/usr/lib/llvm-3.8/lib/clang'
+else
+	Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
+endif
+" }}}
+" Python Folding and Syntax {{{
+Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
+let g:SimpylFold_docstring_preview=1
+" }}}
+" Tagbar {{{
+Plug 'majutsushi/tagbar', { 'has': 'ctags' }
+nmap <C-b> :TagbarToggle<cr>
+" }}}
+
+" Goyo setup {{{
+" Distraction Free Vim
+Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
+Plug 'reedes/vim-colors-pencil', { 'on': 'Goyo'}
+function! s:goyo_enter()
+    set nonumber
+    colorscheme pencil
+    set background=dark
+endfunction
+
+function! s:goyo_leave()
+    colorscheme solarized
+    set number
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+" }}}
+" Syntax Checker for neovim
+Plug 'neomake/neomake', { 'has': 'nvim'}
+" Proper Python Folding
+Plug 'FreekKalter/vim-python-folding', {'for': 'python'}
+" Better Markdown highlighting
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
+" Better latex syntax highlighting
+Plug 'gerw/vim-tex-syntax', { 'for': 'tex'}
+" Julia Syntax Support
+Plug 'JuliaEditorSupport/julia-vim'
+" Enable Table mode with leader tm
+Plug 'dhruvasagar/vim-table-mode', { 'for': 'markdown'}
+
+call plug#end()
+" }}}
+" }}}
+" UI/UX {{{
+set background=dark
+colorscheme solarized
+set cursorline
+set showmatch
+set incsearch
+set hlsearch        " Highlights Matches
+set ignorecase    " Case insensitive searches
+set smartcase       " Case insensitive unless using a capital letter
+set foldlevelstart=0   " Most folds open by default
+set foldnestmax=10  " 10 nested folds max
+set foldmethod=marker   " Fold based on markers by default
+set wildmenu
+" }}}
+" File Formatting {{{
+filetype plugin indent on
+set autoindent
+syntax on
+" }}}
+" Autocommands {{{
+" Filetype Specific {{{
+" Vim {{{
+augroup filetype_vim
+	autocmd!
+	autocmd FileType vim setlocal foldmethod=marker
+	autocmd FileType vim setlocal foldlevel=0
+augroup end
+" }}}
+" Python {{{
+augroup FileType_python
+	autocmd!
+	autocmd FileType python setlocal tabstop=4
+	autocmd FileType python setlocal expandtab
+	autocmd FileType python setlocal shiftwidth=4
+	autocmd FileType python setlocal softtabstop=4
+	autocmd FileType python let python_highlight_all=1
+	autocmd FileType python setlocal smarttab
+	autocmd FileType python setlocal textwidth=100
+	autocmd FileType python setlocal smartindent
+augroup end
+" }}}
+" MATLAB {{{
+augroup filetype_matlab
+    autocmd!
+    " Fold based on indentation level
+    autocmd FileType matlab setlocal foldmethod=indent
+    " Abbreviations TODO: replace these with snippets
+    autocmd FileType matlab iabbrev <buffer> func function<cr>end<esc>kA
+    autocmd FileType matlab iabbrev <buffer> switch switch<cr>end<esc>kA
+    autocmd FileType matlab iabbrev <buffer> if if<cr>end<esc>kA
+    autocmd FileType matlab iabbrev <buffer> for for<cr>end<esc>kA
+    autocmd FileType matlab iabbrev <buffer> while while<cr>end<esc>kA
+augroup end
+" }}}
+" C/C++ {{{
+augroup filetype_c
+	autocmd!
+	autocmd FileType c setlocal foldmethod=syntax
+	autocmd FileType cpp setlocal foldmethod=syntax
+	autocmd FileType c setlocal textwidth=100
+	autocmd FileType cpp setlocal textwidth=100
+	autocmd FileType c setlocal softtabstop=4
+	autocmd FileType cpp setlocal softtabstop=4
+	autocmd FileType c setlocal shiftwidth=4
+	autocmd FileType cpp setlocal shiftwidth=4
+augroup end
+" }}}
+" Markdown {{{
+augroup filetype_markdown
+	autocmd!
+	autocmd FileType markdown setlocal textwidth=79
+augroup end
+" }}}
+" ZSH {{{
+augroup filetype_zsh
+	autocmd!
+	autocmd filetype zsh setlocal foldmethod=marker
+augroup end
+" }}}
+" }}}
+" }}}

@@ -1,0 +1,103 @@
+# The following lines were added by compinstall {{{
+
+zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*' expand prefix suffix
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=** r:|=**' 'l:|=* r:|=*'
+zstyle ':completion:*' max-errors 2 numeric
+zstyle ':completion:*' original true
+zstyle ':completion:*' menu select
+zstyle :compinstall filename '/home/david/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory autocd extendedglob
+unsetopt beep
+bindkey -v
+# End of lines configured by zsh-newuser-install }}}
+# Use Nvim if it exists {{{
+if type nvim > /dev/null 2>&1; then
+	alias vim='nvim'
+	export EDITOR=nvim
+fi
+# }}}
+# Auto-correct Prompt {{{
+setopt correct
+autoload -U colors && colors
+export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color? (Yes, No, Abort, Edit) "
+export SHELL=/bin/zsh
+# }}}
+
+alias ls="ls --color=always"
+autoload -U history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+bindkey "$terminfo[kcuu1]" history-beginning-search-backward
+bindkey "$terminfo[kcud1]" history-beginning-search-forward
+
+# Plugin Management {{{
+# Autoinstall zplug {{{
+if [[ ! -d ~/.zplug ]]; then
+  git clone https://github.com/zplug/zplug ~/.zplug
+  source ~/.zplug/init.zsh && zplug update --self
+fi
+# }}}
+source ~/.zplug/init.zsh
+
+# Plugin Installation {{{
+zplug "plugins/git",	from:oh-my-zsh
+zplug "plugins/vi-mode",	from:oh-my-zsh
+zplug "rupa/z"
+zplug "Tarrasch/zsh-bd"
+zplug "ael-code/zsh-colored-man-pages"
+zplug "zdharma/fast-syntax-highlighting"
+# Notify about aliases
+zplug "MichaelAquilina/zsh-you-should-use"
+# Powerline prompt
+zplug "bhilburn/powerlevel9k", as:theme
+# }}}
+
+# Check for new plugins {{{
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+# }}}
+
+zplug load
+
+# Plugin Settings {{{
+# Powerline {{{
+DEFAULT_USER=david
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
+POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='153'
+POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND='236'
+POWERLEVEL9K_VI_MODE_INSERT_FOREGROUND='153'
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='153'
+POWERLEVEL9K_DIR_HOME_BACKGROUND='153'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='153'
+POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='236'
+POWERLEVEL9K_DIR_HOME_FOREGROUND='236'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='236'
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir battery)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status vi_mode vcs)
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=" "
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+# }}}
+# ZSH Syntax Highlighting {{{
+FAST_HIGHLIGHT_STYLES[path]='bold'
+FAST_HIGHLIGHT_STYLES[globbing]='fg=yellow'
+FAST_HIGHLIGHT_STYLES[precommand]='fg=yellow,bold'
+# }}}
+# }}}
+# }}}
