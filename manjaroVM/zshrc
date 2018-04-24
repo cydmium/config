@@ -61,7 +61,7 @@ source ~/.zplug/init.zsh
 
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/vi-mode", from:oh-my-zsh
-zplug "rupa/z", as:plugin
+zplug "rupa/z", use:z.sh
 zplug "Tarrasch/zsh-bd", as:plugin
 zplug "ael-code/zsh-colored-man-pages", as:plugin
 zplug "zdharma/fast-syntax-highlighting", as:plugin
@@ -119,3 +119,5 @@ export PATH="$PATH:$HOME/.local/bin/"
 #(cat ~/.cache/wal/sequences &)
 alias ls='ls --color=always'
 # }}}
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -92,7 +92,7 @@
         " }}}
     " Fold Settings {{{
         set foldenable
-        set foldlevelstart=999  " Folds open by default
+        set foldlevelstart=11  " Folds open by default
         set foldnestmax=10      " Maximum of 10 nested folds
         set foldmethod=marker   " Default to requiring marked folds
         " }}}
@@ -136,7 +136,8 @@
         " Wrap Words/Sections With (),{},[],'',"", etc.
         Plug 'tpope/vim-surround'
         " Comment Plugin
-        Plug 'tpope/vim-commentary'
+        " Plug 'tpope/vim-commentary'
+        Plug 'scrooloose/nerdcommenter'
         " Set of [/] statements for toggling options
         Plug 'tpope/vim-unimpaired'
         " Autocomplete (),{},[],'',"", etc.
@@ -151,7 +152,9 @@
         " Autocorrect
         Plug 'sedm0784/vim-you-autocorrect'
         " Fuzzy Searcher
-        Plug 'ctrlpvim/ctrlp.vim'
+        " Plug 'ctrlpvim/ctrlp.vim'
+        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+        Plug 'junegunn/fzf.vim'
         " File Tagging Integration
         Plug 'majutsushi/tagbar'
         Plug 'ludovicchabant/vim-gutentags'
@@ -184,6 +187,8 @@
         Plug 'JuliaEditorSupport/julia-vim'
         " A - Easy Header File Switching
         Plug 'vim-scripts/a.vim', { 'for': ['c++', 'c']}
+        " Better Vim Start Screen
+        Plug 'mhinz/vim-startify'
         " Autocomplete Support {{{
             if has('nvim')
                 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemovePlugins'}
@@ -206,6 +211,40 @@
             let g:airline#extensions#tabline#enabled = 1
             let g:airline_theme='gruvbox'
             let g:airline_powerline_fonts = 1
+            " Symbols {{{
+                if !exists('g:airline_symbols')
+                    let g:airline_symbols={}
+                endif
+                " unicode symbols
+                let g:airline_left_sep = '»'
+                let g:airline_left_sep = '▶'
+                let g:airline_right_sep = '«'
+                let g:airline_right_sep = '◀'
+                let g:airline_symbols.crypt = ''
+                let g:airline_symbols.linenr = ''
+                let g:airline_symbols.linenr = ''
+                let g:airline_symbols.linenr = ''
+                let g:airline_symbols.linenr = '¶'
+                let g:airline_symbols.maxlinenr = ''
+                let g:airline_symbols.maxlinenr = ''
+                let g:airline_symbols.branch = ''
+                let g:airline_symbols.paste = 'ρ'
+                let g:airline_symbols.paste = 'Þ'
+                let g:airline_symbols.paste = '∥'
+                let g:airline_symbols.spell = ''
+                let g:airline_symbols.notexists = ''
+                let g:airline_symbols.whitespace = 'Ξ'
+
+                " powerline symbols
+                let g:airline_left_sep = ''
+                let g:airline_left_alt_sep = ''
+                let g:airline_right_sep = ''
+                let g:airline_right_alt_sep = ''
+                let g:airline_symbols.branch = ''
+                let g:airline_symbols.readonly = ''
+                let g:airline_symbols.linenr = ''
+                let g:airline_symbols.maxlinenr = ''
+                " }}}
             " }}}
         " ctrlP options {{{
             let g:ctrlp_working_path_mode = 'r'
@@ -217,6 +256,28 @@
                 " Don't cache ctrlP
                 let g:ctrlp_use_caching=0
             endif
+            " }}}
+        " fzf options {{{
+            let g:fzf_action = {
+                \ 'ctrl-j': 'split',
+                \ 'ctrl-k': 'vsplit',
+                \ 'ctrl-t': 'tab split' }
+            command! -bang -nargs=* Rg
+                        \ call fzf#vim#grep(
+                        \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+                        \   <bang>0 ? fzf#vim#with_preview('up:60%')
+                        \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+                        \   <bang>0)
+            nnoremap ; :Buffers<cr>
+            nnoremap <leader>f :Files<cr>
+            nnoremap <leader>g :GFiles<cr>
+            nnoremap <leader>t :Tags<cr>
+            " }}}
+        " Nerd Commenter {{{
+            let g:NERDSpaceDelims = 1
+            let g:NERDCompactSexyComs = 1
+            let g:NERDCommentEmptyLines = 1
+            let g:NERDTrimTrailingWhitespace = 1
             " }}}
         " Neomake Settings
         call neomake#configure#automake('nrw', 200)
