@@ -70,6 +70,7 @@
     " }}}
 " Vim Options {{{
     filetype plugin indent on	"detect file type 
+    syntax on   " Set Vim Syntax Highlighting
     set autoindent
     set hidden          " Buffers don't require writes
     set number          " Line numbers
@@ -171,6 +172,7 @@
         " Linter
         Plug 'neomake/neomake', { 'has': 'nvim'}
         " Snippets
+        new change testing
         Plug 'Shougo/neosnippet.vim'
         Plug 'Shougo/neosnippet-snippets'
         Plug 'honza/vim-snippets'
