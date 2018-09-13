@@ -1,0 +1,14 @@
+#!/bin/zsh
+# copy a file to <name>.bak or restore it if it already ends in .bak
+
+for FILE in "$@"
+do
+    FILENAME=${FILE%.*}
+    EXTENSION=${FILE##*.}
+    if [ $EXTENSION = "bak" ]
+    then
+        mv $FILE $FILENAME
+    else
+        rsync -avzh $FILE ${FILE}.bak
+    fi
+done
