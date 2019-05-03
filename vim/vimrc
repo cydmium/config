@@ -192,9 +192,12 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " Open Vim to specific line
 Plug 'kopischke/vim-fetch'
+" Better Vim Start Screen
+Plug 'mhinz/vim-startify'
 
 " Colorscheme
 Plug 'sjl/badwolf'
+Plug 'morhetz/gruvbox'
 Plug 'reedes/vim-colors-pencil', { 'on': 'Goyo'}
 
 " Conditional Plugins
@@ -226,7 +229,7 @@ let g:ycm_autoclose_preview_window_after_completion=1
 
 " vim-airline configuration
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='wombat'
+let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
 set noshowmode      " Remove default mode information
 set ttimeoutlen=10  " Make mode changes faster
@@ -263,7 +266,7 @@ function! s:goyo_enter()
 endfunction
 
 function! s:goyo_leave()
-    colorscheme badwolf
+    colorscheme gruvbox
     set number
 endfunction
 
@@ -302,7 +305,7 @@ let g:latex_to_unicode_auto = 1
 " }}}
 " Colors and UI Options {{{
 set background=dark
-colorscheme badwolf " Color Scheme
+colorscheme gruvbox " Color Scheme
 syntax on           " Turn on Syntax Highlighting
 set tabstop=4       " How many spaces a Tab is viewed as
 set softtabstop=4   " Number of spaces inserted when you hit tab and removed when you delete a tab

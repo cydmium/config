@@ -1,0 +1,171 @@
+# The following lines were added by compinstall {{{
+
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' expand prefix suffix
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' ignore-parents parent pwd directory
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=** r:|=**' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' menu select
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle :compinstall filename '/home/drichardson42-gtri/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt autocd extendedglob notify
+unsetopt beep
+bindkey -v
+# End of lines configured by zsh-newuser-install }}}
+# Use Neovim if it exists {{{
+if type nvim > /dev/null 2>&1; then
+    alias vim='nvim'
+    alias vi='nvim'
+    export EDITOR=nvim
+elif type vim > /dev/null 2>&1; then
+    export EDITOR=vim
+else
+    export EDITOR=vi
+fi
+# }}}
+# SSH Aliases {{{
+alias -g 'lng2=ssh -X lightning2 -t zsh'
+alias -g 'lng=ssh -X lightning -t zsh'
+alias -g 'lak=ssh -X lakota -t zsh'
+alias -g 'chey=ssh -X cheyenne -t zsh'
+alias -g 'chin=ssh -X chinook -t zsh'
+alias -g 'cbr=ssh -X cobra -t zsh'
+alias -g 'cyc=ssh -X cyclone -t zsh'
+alias -g 'gib=ssh -X gibson -t zsh'
+alias -g 'fen=ssh -X fender -t zsh'
+alias -g 'laz=ssh -X lazarus -t zsh'
+alias -g 'lng-old=ssh -X lightning-old -t zsh'
+alias -g 'rap=ssh -X raptor -t zsh'
+alias -g 'tes=ssh -X tesla -t zsh'
+# }}}
+# Auto-correct Prompt {{{
+setopt correct
+autoload -U colors && colors
+export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color? (Yes, No, Abort, Edit) "
+export SHELL=/bin/zsh
+# }}}
+# Key Bindings {{{
+# Fix Delete and Home Keys in Prompt {{{
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+bindkey "^[[3~" delete-char
+bindkey "^[[Z"  menu-complete
+# }}}
+bindkey "^[[A" history-beginning-search-backward
+bindkey "^[[B" history-beginning-search-forward
+# }}}
+# Export Commands {{{
+export LANG=en_US.UTF-8
+export LC_ALL="en_US.UTF-8"
+export PATH=$PATH:/usr/lib64/qt4/bin:$HOME/.local/bin:$HOME/bin/mview
+export KEYTIMEOUT=10
+# }}}
+# Antigen Setup {{{
+# Auto-install Antigen {{{
+if [[ ! -d ~/.bundle ]]; then
+    mkdir ~/.bundle
+    curl -L git.io/antigen > ~/.bundle/antigen.zsh
+fi
+# }}}
+source ~/.bundle/antigen.zsh
+# Plugin Installation {{{
+antigen bundle git
+# CD to "frecent" directories with z
+antigen bundle rupa/z
+antigen bundle vi-mode
+antigen bundle mafredri/zsh-async
+# bd = backwards cd
+antigen bundle Tarrasch/zsh-bd
+antigen bundle ael-code/zsh-colored-man-pages
+antigen bundle zdharma/fast-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+# Notify about aliases
+antigen bundle MichaelAquilina/zsh-you-should-use
+# Powerline prompt
+antigen theme bhilburn/powerlevel9k
+
+antigen apply
+# }}}
+# Plugin Settings {{{
+# Autosuggest {{{
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+# ZSH_AUTOSUGGEST_USE_ASYNC=1
+bindkey '^j' autosuggest-accept
+bindkey '^k' autosuggest-execute
+bindkey '^l' autosuggest-fetch
+# }}}
+# Powerline {{{
+DEFAULT_USER=drichardson42-gtri
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
+POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='153'
+POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND='236'
+POWERLEVEL9K_VI_MODE_INSERT_FOREGROUND='153'
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='153'
+POWERLEVEL9K_DIR_HOME_BACKGROUND='153'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='153'
+POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='236'
+POWERLEVEL9K_DIR_HOME_FOREGROUND='236'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='236'
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status vi_mode vcs)
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=" "
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+# }}}
+# ZSH Syntax Highlighting {{{
+FAST_HIGHLIGHT_STYLES[path]='bold'
+FAST_HIGHLIGHT_STYLES[globbing]='fg=yellow'
+FAST_HIGHLIGHT_STYLES[precommand]='fg=yellow,bold'
+# }}}
+# }}}
+
+# FZF {{{
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
+# fe - opens file in $EDITOR instead of returning it to command line
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
+# fd - cd to selected directory
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# fbr - checkout git branch
+fbr() {
+  local branches branch
+  branches=$(git branch --all | grep -v HEAD) &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+# }}}
+
+# Disable globbing on the remote path.
+alias scp='noglob scp_wrap'
+function scp_wrap {
+  local -a args
+  local i
+  for i in "$@"; do case $i in
+    (*:*) args+=($i) ;;
+    (*) args+=(${~i}) ;;
+  esac; done
+  command scp "${(@)args}"
+} 
