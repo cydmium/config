@@ -1,3 +1,8 @@
+" Header {{{
+" vim: set foldmethod=marker foldlevel=0:
+" Author: David Richardson
+" Author Email: davidrichardson96@gmail.com
+"
 "                            iiii                          
 "                           i::::i                         
 "                            iiii                          
@@ -15,6 +20,7 @@
 "           v:::v          i::::::im::::m   m::::m   m::::m
 "            vvv           iiiiiiiimmmmmm   mmmmmm   mmmmmm
 "
+" }}}
 " Remappings {{{
     let mapleader = ","	" Define leader as comma, default is \
     " Allow j and k to move to wrapped lines
@@ -31,7 +37,7 @@
     " H and L move to beginning (first non-space char) or end of current line
     nnoremap H ^
     nnoremap L $
-    " bind jk to escape
+    " easier escape
     inoremap jk <esc>
     " Turn off Search Highlighting
     nnoremap <leader><space> :nohlsearch<CR>
@@ -70,6 +76,7 @@
     " }}}
 " Vim Options {{{
     filetype plugin indent on	"detect file type 
+    syntax on
     set autoindent
     set hidden          " Buffers don't require writes
     set number          " Line numbers
@@ -81,6 +88,7 @@
     set scrolloff=3     " Always show 3 lines above or below cursor
     set showcmd
     set wildmenu        " Show autocompletion options
+    set updatetime=500
     " Turn off Search Highlighting
     nnoremap <leader><space> :nohlsearch<CR>
     set pastetoggle=<f2>
@@ -328,8 +336,8 @@
             " }}}
         " A {{{
             nnoremap <leader>a :A<cr>
-            nnoremap <leader>as :AS<cr>
-            nnoremap <leader>at :AT<cr>
+            nnoremap <leader>sa :AS<cr>
+            nnoremap <leader>ta :AT<cr>
             " }}}
         " }}}
     " }}}
